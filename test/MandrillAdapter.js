@@ -9,7 +9,7 @@ const config = {
 
 describe('MandrillAdapter', () => {
     throwsError = (args) => {
-        console.log(Adapter.MandrillAdapter())
+        Adapter.MandrillAdapter(args)
     }
     describe('initializing mandrill', () => {
         it('should fail if called without a configuration object', () => {
@@ -17,10 +17,6 @@ describe('MandrillAdapter', () => {
         });
 
         it('should fail if not called with an apiKey or fromEmail', () => {
-            expect(throwsError.bind(null, { apiKey: '.', fromAddress: '.' })).to.throw('MandrillAdapter requires an API Key and a From Email Address');        
-        });
-
-        it('should fail if not send user', () => {
             expect(throwsError.bind(null, { apiKey: '.', fromAddress: '.' })).to.throw('MandrillAdapter requires an API Key and a From Email Address');        
         });
     })
