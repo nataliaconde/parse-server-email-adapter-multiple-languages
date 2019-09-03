@@ -1,0 +1,8 @@
+{
+    "e":{
+        "verificationSubject": "Please verify your e-mail for *|appname|*",
+        "verificationBody": "Hi,\n\nYou are being asked to confirm the e-mail address *|email|* with *|appname|*\n\nClick here to confirm it:\n*|link|*",
+        "passwordResetSubject": "Password Reset Request for *|appname|*",
+        "passwordResetBody":"Hi,\n\nYou requested a password reset for *|appname|*.\n\nClick here to reset it:\n*|link|"
+    }
+}

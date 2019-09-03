@@ -1,0 +1,32 @@
+{
+  "name": "parse-server-email-adapter-multiple-languages",
+  "version": "1.0.0",
+  "description": "Used to send Parse Server password reset and email verification emails through Mandrill, supporting templates.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/MandrillAdapter.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nataliaconde/parse-server-email-adapter-multiple-languages.git"
+  },
+  "keywords": [
+    "parse",
+    "parse-server",
+    "email-adapter",
+    "mandrill",
+    "back4app",
+    "languages",
+    "multiple"
+  ],
+  "author": "Natália Condê <natalia.csouza98@outlook.com>",
+  "bugs": {
+    "url": "https://github.com/nataliaconde/parse-server-email-adapter-multiple-languages/issues"
+  },
+  "homepage": "https://github.com/nataliaconde/parse-server-email-adapter-multiple-languages#readme",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "mandrill-api": "^1.0.45",
+    "mocha": "^6.2.0"
+  }
+}
