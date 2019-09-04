@@ -1,6 +1,8 @@
 let mandrill = require('mandrill-api/mandrill');
 const default_en = require("./default.json");
 
+const log = console.log;
+
 const ERRORS = {
     missing_configuration: 'MandrillAdapter requires configuration.',
     missing_mandrill_settings:
@@ -20,7 +22,10 @@ MandrillAdapter = (mandrillOptions) => {
     }
 
     let sendVerificationEmail = options => {
-        let global_merge_vars = globalVars(options);
+        log(options)
+        let global_merge_vars = globalVars(mandrillOptions, options);
+
+        let configMessage = configureText(options.user)
 
         let message = getMessageToSend(fromEmail, displayName, replyTo, configMessage, options, global_merge_vars)
         
@@ -34,7 +39,7 @@ MandrillAdapter = (mandrillOptions) => {
     }
 
     let sendPasswordResetEmail = options => {
-        let global_merge_vars = globalVars(options);
+        let global_merge_vars = globalVars(mandrillOptions, options);
 
         let message = getMessageToSend(fromEmail, displayName, replyTo, message, options, global_merge_vars)
 
@@ -48,7 +53,7 @@ MandrillAdapter = (mandrillOptions) => {
     }
 
     let sendMail = options => {
-        let global_merge_vars = globalVars(options);
+        let global_merge_vars = globalVars(mandrillOptions, options);
 
         let message = getMessageToSend(fromEmail, displayName, replyTo, message, options, global_merge_vars)
 
@@ -65,7 +70,8 @@ MandrillAdapter = (mandrillOptions) => {
 
 }
 
-globalVars = (options) =>{
+globalVars = (mandrillOptions, options) =>{
+    log(options)
     let global_merge_vars = [
         { name: 'appname', content: options.appName },
         { name: 'username', content: options.user.get("username") },
@@ -120,10 +126,10 @@ sendTemplate = (mandrill_client, mandrillOptions, message, resolve, reject) => {
     );
 }
 
-selectText = (options) =>{
-    let options = options.user.get("localIndentifier");
+configureText = (options) =>{
+    let language = options.get("localIndentifier");
 
-    if(!options){
+    if(!language){
 
     } else { 
         

@@ -1,12 +1,6 @@
 const expect = require('chai').expect;
 const Adapter = require('../index.js');
 
-const config = {
-    fromAddress: 'AwesomeApp <noreply@awesomeapp.com>',
-    domain: 'yourmailgundomain.mailgun.org',
-    apiKey: 'secretApiKey'
-}
-
 describe('MandrillAdapter', () => {
     throwsError = (args) => {
         Adapter.MandrillAdapter(args)
@@ -20,16 +14,42 @@ describe('MandrillAdapter', () => {
             expect(throwsError.bind(null, { apiKey: '.', fromAddress: '.' })).to.throw('MandrillAdapter requires an API Key and a From Email Address');        
         });
     })
-    describe('templates', ()=>{
-        it('', () => {
-            const test_3 = {
-                apiKey: '.', domain: '.', fromAddress: '.',
-                templates: {
-                    passwordResetEmail: { subject: '.' },
-                    verificationEmail: { subject: '.' }
+    describe('sendEmail', ()=>{
+        const Parse = {
+            User: class User {
+                get(arg) {
+                    let value;
+                    switch (arg) {
+                        case 'username':
+                            value = 'foo'
+                            break;
+                        case 'email':
+                            value = 'foo@bar.com'
+                            break;
+                    }
+                    return value;
                 }
-            };
-            expect(throwsError.bind(null, undefined)).to.throw('MandrillAdapter requires configuration.');
+            }
+        };
+
+        const user = new Parse.User();
+
+        const config = {
+            apiKey:"AAAAAA11AAA",
+            fromEmail:"abc@abc.b4" 
+        }
+
+        const options = {
+            displayName:"TEST",
+            replyTo:"abc@abc.b4",
+            appName: "Test",
+            user: user
+        }
+        
+        it('it should failed because api key is wrong', () => {
+            let mandrill = Adapter.MandrillAdapter(config);
+            mandrill.sendVerificationEmail(options)
+            // expect(throwsError.bind(null, config)).to.throw('MandrillAdapter requires configuration.');
         });
     })
 })
