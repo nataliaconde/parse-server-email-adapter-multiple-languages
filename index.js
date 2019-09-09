@@ -1,5 +1,5 @@
 let mandrill = require('mandrill-api/mandrill');
-const default_en = require("./default.json");
+const en_US = require("./default.json");
 
 const log = console.log;
 
@@ -21,19 +21,28 @@ MandrillAdapter = (mandrillOptions) => {
         throw new Error(ERRORS.missing_mandrill_settings);
     }
 
+    mandrillOptions.replyTo =
+        mandrillOptions.replyTo ||
+        mandrillOptions.fromEmail;
+    mandrillOptions.displayName =
+        mandrillOptions.displayName ||
+        mandrillOptions.replyTo;    
+
+    mandrillOptions.customUserAttributesMergeTags = mandrillOptions.customUserAttributesMergeTags || [];
+
+    let mandrill_client = new mandrill.Mandrill(mandrillOptions.apiKey);
+
     let sendVerificationEmail = options => {
-        log(options)
         let global_merge_vars = globalVars(mandrillOptions, options);
-
-        let configMessage = configureText(options.user)
-
-        let message = getMessageToSend(fromEmail, displayName, replyTo, configMessage, options, global_merge_vars)
+        let configMessage = configureLocale(options.user);
+        console.log(configMessage)
+        let message = getMessageToSend(fromEmail, displayName, replyTo, configMessage, options, global_merge_vars, mandrillOptions);
         
         return new Promise((resolve, reject) => {
             if (mandrillOptions.verificationTemplateName) {
                 sendTemplate(mandrill_client, mandrillOptions, message, resolve, reject)
             } else {
-                sendMail(mandrill_client, message);
+                mandrillClient(mandrill_client, message);
             }
         });
     }
@@ -47,19 +56,36 @@ MandrillAdapter = (mandrillOptions) => {
             if (mandrillOptions.passwordResetTemplateName) {                
                 sendTemplate(mandrill_client, mandrillOptions, message, resolve, reject)
             } else {
-                sendMail(mandrill_client, message, resolve, reject);
+                mandrillClient(mandrill_client, message, resolve, reject);
             }
         });
     }
 
     let sendMail = options => {
-        let global_merge_vars = globalVars(mandrillOptions, options);
-
-        let message = getMessageToSend(fromEmail, displayName, replyTo, message, options, global_merge_vars)
-
+        console.log(options)
+        let message = {
+          from_email: mandrillOptions.fromEmail,
+          from_name: mandrillOptions.displayName,
+          headers: {
+            'Reply-To': mandrillOptions.replyTo
+          },
+          to: [{
+            email: options.to
+          }],
+          subject: options.subject,
+          text: options.text
+        }
+    
         return new Promise((resolve, reject) => {
-            sendMail(mandrill_client, message, resolve, reject);
-        });       
+          mandrill_client.messages.send(
+            {
+              message: message,
+              async: true
+            },
+            resolve,
+            reject
+          )
+      });
     }
 
     return Object.freeze({
@@ -71,7 +97,6 @@ MandrillAdapter = (mandrillOptions) => {
 }
 
 globalVars = (mandrillOptions, options) =>{
-    log(options)
     let global_merge_vars = [
         { name: 'appname', content: options.appName },
         { name: 'username', content: options.user.get("username") },
@@ -88,16 +113,17 @@ globalVars = (mandrillOptions, options) =>{
     return global_merge_vars;
 }
 
-getMessageToSend = (fromEmail, displayName, replyTo, message, options, global_merge_vars) =>{
+getMessageToSend = (fromEmail, displayName, replyTo, message, options, global_merge_vars, mandrillOptions) =>{
+    let email = (options.user.get("email"));
     return {
         from_email: fromEmail,
         from_name: displayName,
         headers: {
             'Reply-To': replyTo
         },
-        to: [{  email: options.user.get("email") }],
+        to: [{  email: email}],
         subject: message.verificationSubject,
-        text: mandrillOptions.verificationBody,
+        text: message.verificationBody,
         global_merge_vars: global_merge_vars
     }
 }
@@ -126,14 +152,9 @@ sendTemplate = (mandrill_client, mandrillOptions, message, resolve, reject) => {
     );
 }
 
-configureText = (options) =>{
+configureLocale = (options) =>{
     let language = options.get("localIndentifier");
-
-    if(!language){
-
-    } else { 
-        
-    }
+    return (language != undefined ? language : "en-US");
 }
 
 module.exports = { MandrillAdapter };

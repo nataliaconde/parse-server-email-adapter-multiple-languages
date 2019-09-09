@@ -36,20 +36,22 @@ describe('MandrillAdapter', () => {
 
         const config = {
             apiKey:"AAAAAA11AAA",
-            fromEmail:"abc@abc.b4" 
+            fromEmail:"abc@test.br" 
         }
 
         const options = {
             displayName:"TEST",
-            replyTo:"abc@abc.b4",
+            replyTo:"abc@abc.br",
             appName: "Test",
             user: user
         }
         
         it('it should failed because api key is wrong', () => {
             let mandrill = Adapter.MandrillAdapter(config);
-            mandrill.sendVerificationEmail(options)
-            // expect(throwsError.bind(null, config)).to.throw('MandrillAdapter requires configuration.');
+            mandrill.sendVerificationEmail(options).then(error=>{
+                // console.log("e=:" + error)
+                // expect(throwsError.bind(null, config)).to.throw('MandrillAdapter requires configuration.');
+            })            
         });
     })
 })
