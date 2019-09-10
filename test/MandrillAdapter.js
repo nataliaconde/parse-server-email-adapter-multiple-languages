@@ -46,12 +46,17 @@ describe('MandrillAdapter', () => {
             user: user
         }
         
-        it('it should failed because api key is wrong', () => {
+        it('test1', () => {
             let mandrill = Adapter.MandrillAdapter(config);
-            mandrill.sendVerificationEmail(options).then(error=>{
-                // console.log("e=:" + error)
-                // expect(throwsError.bind(null, config)).to.throw('MandrillAdapter requires configuration.');
-            })            
+            mandrill.sendVerificationEmail(options);       
         });
+
+        // it('it should failed because api key is wrong', () => {
+        //     let mandrill = Adapter.MandrillAdapter(config);
+        //     mandrill.sendVerificationEmail(options).then(error=>{
+        //         // console.log("e=:" + error)
+        //         // expect(throwsError.bind(null, config)).to.throw('MandrillAdapter requires configuration.');
+        //     })            
+        // });
     })
 })

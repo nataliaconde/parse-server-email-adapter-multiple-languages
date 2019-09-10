@@ -1,14 +1,13 @@
-let mandrill = require('mandrill-api/mandrill');
-const en_US = require("./default.json");
-
-const log = console.log;
-
-const ERRORS = {
+const 
+    mandrill = require('mandrill-api/mandrill'),
+    en_US = require("./default.json"),
+    log = console.log,
+    ERRORS = {
     missing_configuration: 'MandrillAdapter requires configuration.',
     missing_mandrill_settings:
         'MandrillAdapter requires an API Key and a From Email Address',
     bad_template_config: 'MandrillAdapter templates are not properly configured.'
-};
+    };
 
 MandrillAdapter = (mandrillOptions) => {
     if (!mandrillOptions) {
@@ -21,6 +20,8 @@ MandrillAdapter = (mandrillOptions) => {
         throw new Error(ERRORS.missing_mandrill_settings);
     }
 
+    let mandrill_client = new mandrill.Mandrill(mandrillOptions.apiKey);    
+
     mandrillOptions.replyTo =
         mandrillOptions.replyTo ||
         mandrillOptions.fromEmail;
@@ -28,23 +29,27 @@ MandrillAdapter = (mandrillOptions) => {
         mandrillOptions.displayName ||
         mandrillOptions.replyTo;    
 
-    mandrillOptions.customUserAttributesMergeTags = mandrillOptions.customUserAttributesMergeTags || [];
-
-    let mandrill_client = new mandrill.Mandrill(mandrillOptions.apiKey);
+    mandrillOptions.customUserAttributesMergeTags = mandrillOptions.customUserAttributesMergeTags || [];    
 
     let sendVerificationEmail = options => {
+        let language = configureLocale(options);
         let global_merge_vars = globalVars(mandrillOptions, options);
-        let configMessage = configureLocale(options.user);
-        console.log(configMessage)
-        let message = getMessageToSend(fromEmail, displayName, replyTo, configMessage, options, global_merge_vars, mandrillOptions);
-        
+
         return new Promise((resolve, reject) => {
-            if (mandrillOptions.verificationTemplateName) {
-                sendTemplate(mandrill_client, mandrillOptions, message, resolve, reject)
-            } else {
-                mandrillClient(mandrill_client, message);
-            }
+            resolve("done")
         });
+
+        
+        
+        // let message = getMessageToSend(fromEmail, displayName, replyTo, configMessage, options, global_merge_vars, mandrillOptions);
+        
+        // return new Promise((resolve, reject) => {
+        //     if (mandrillOptions.verificationTemplateName) {
+        //         sendTemplate(mandrill_client, mandrillOptions, message, resolve, reject)
+        //     } else {
+        //         mandrillClient(mandrill_client, message);
+        //     }
+        // });
     }
 
     let sendPasswordResetEmail = options => {
@@ -96,23 +101,6 @@ MandrillAdapter = (mandrillOptions) => {
 
 }
 
-globalVars = (mandrillOptions, options) =>{
-    let global_merge_vars = [
-        { name: 'appname', content: options.appName },
-        { name: 'username', content: options.user.get("username") },
-        { name: 'email', content: options.user.get("email") },
-        { name: 'link', content: options.link }
-    ];
-
-    if (typeof mandrillOptions.customUserAttributesMergeTags !== 'undefined') {
-        for (var extra_attr of mandrillOptions.customUserAttributesMergeTags) {
-            global_merge_vars.push({ name: extra_attr, content: options.user.get(extra_attr) || '' });
-        }
-    }
-
-    return global_merge_vars;
-}
-
 getMessageToSend = (fromEmail, displayName, replyTo, message, options, global_merge_vars, mandrillOptions) =>{
     let email = (options.user.get("email"));
     return {
@@ -153,8 +141,47 @@ sendTemplate = (mandrill_client, mandrillOptions, message, resolve, reject) => {
 }
 
 configureLocale = (options) =>{
-    let language = options.get("localIndentifier");
-    return (language != undefined ? language : "en-US");
+    let language = options.user.get("localIndentifier");
+    log(pathExists())
+}
+
+pathExists = () =>{
+    let fs = require('fs'),
+    path = '/path/to/my/file',
+    stats;
+
+    try {
+        stats = fs.statSync(path);
+        fs.readFile(path, {encoding: 'utf-8'}, function(err,data){
+            if (!err) {
+                stats = require("./default.json");
+            } else {
+                log("data", data)
+                stats = data;
+            }
+        });
+        console.log("File exists.");
+    }
+    catch (e) {
+        stats = require("./default.json")
+        console.log("File does not exist.");
+    }
+    return stats;
+}
+
+globalVars = (mandrillOptions, options) =>{
+    let global_merge_vars = [
+        { name: 'appname', content: options.appName },
+        { name: 'username', content: options.user.get("username") },
+        { name: 'email', content: options.user.get("email") },
+        { name: 'link', content: options.link }
+    ];
+    if (typeof mandrillOptions.customUserAttributesMergeTags !== 'undefined') {
+        for (var extra_attr of mandrillOptions.customUserAttributesMergeTags) {
+            global_merge_vars.push({ name: extra_attr, content: options.user.get(extra_attr) || '' });
+        }
+    }
+    return global_merge_vars;
 }
 
 module.exports = { MandrillAdapter };
