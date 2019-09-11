@@ -46,12 +46,6 @@ MandrillAdapter = (mandrillOptions) => {
                 mandrillClient(mandrill_client, message);
             }
         });
-
-        
-        
-        
-        
-        
     }
 
     let sendPasswordResetEmail = options => {
