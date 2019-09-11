@@ -26,6 +26,9 @@ describe('MandrillAdapter', () => {
                         case 'email':
                             value = 'foo@bar.com'
                             break;
+                        case 'localIdentifier':
+                            value = 'en_S'
+                            break;
                     }
                     return value;
                 }
@@ -48,7 +51,7 @@ describe('MandrillAdapter', () => {
         
         it('test1', () => {
             let mandrill = Adapter.MandrillAdapter(config);
-            mandrill.sendVerificationEmail(options);       
+            mandrill.sendMail(options);       
         });
 
         // it('it should failed because api key is wrong', () => {
