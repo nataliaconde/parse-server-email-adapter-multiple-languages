@@ -6,7 +6,7 @@ const configWrong = {
 }
 
 const correctKeys = {
-    apiKey:"AAAAAA11AAA",
+    apiKey:"ed6be5d5420333680786a5719733c1cb-us4",
     fromEmail:"abc@test.br" 
 }
 

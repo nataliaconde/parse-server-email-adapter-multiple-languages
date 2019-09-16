@@ -19,7 +19,12 @@ describe('MandrillAdapter', () => {
 
     describe('API Keys', ()=>{
         it('should faild if email address is wrong', () => {
-
+            sendVerificationEmailTest.localeIdentifierUndefined(Adapter).then(result=>{
+                log(result)
+                expect(result.message).to.throw('Invalid API key');
+            }).catch(error=>{
+                log(error)
+            });
         });
 
         it('should faild if API Keys is wrong', () => {
