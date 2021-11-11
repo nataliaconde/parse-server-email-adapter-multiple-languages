@@ -75,9 +75,9 @@ configureSendEmailMessage = (mandrillOptions, options, text) => {
 
 }
 
-configureMessage = (options) => {
+configureMessage = (options, mandrillOptions) => {
     let language = options.user.get("localeIdentifier")
-    let file = pathExists(options.pathFile);
+    let file = pathExists(mandrillOptions.pathFile);
 
     if (file[language] === undefined) {
         return en_US["en_US"];
