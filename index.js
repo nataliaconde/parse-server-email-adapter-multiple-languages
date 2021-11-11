@@ -16,7 +16,7 @@ MandrillAdapter = (mandrillOptions) => {
         throw new Error(ERRORS.missing_configuration);
     }
 
-    const { apiKey, fromEmail , displayName, replyTo} = mandrillOptions;
+    const { apiKey, fromEmail , displayName, replyTo } = mandrillOptions;
     
     if (!apiKey || !fromEmail) {
         throw new Error(ERRORS.missing_mandrill_settings);

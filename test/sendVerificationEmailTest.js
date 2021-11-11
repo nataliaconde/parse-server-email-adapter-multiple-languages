@@ -1,5 +1,5 @@
 const log = console.log
-
+const helpers = require("../helpers")
 const configWrong = {
     apiKey:"AAAAAA11AAA",
     fromEmail:"abc@test.br" 
@@ -35,7 +35,7 @@ ParseUser = (localeIdentifier) =>{
     return user;
 }
 
-localeIdentifierUndefined = async(Adapter, value) =>{
+sendMessageTest = async(Adapter, value) =>{
     const user = ParseUser(value);
 
     console.log("user => ", user.get("localeIdentifier"))
@@ -57,6 +57,24 @@ localeIdentifierUndefined = async(Adapter, value) =>{
     })
 }
 
+localeIdentifierUndefined = async(Adapter, value) =>{
+    const user = ParseUser(value);
+
+    console.log("user => ", user.get("localeIdentifier"))
+
+    const options = {
+        displayName:"TEST",
+        replyTo:"abc@abc.br",
+        appName: "Test",
+        pathFile: "/home/natalia/projects/parse-server-email-adapter-multiple-languages/locale.json",
+        user: user
+    }
+    
+    const file = helpers.configureMessage(options);
+    return file;
+}
+
 module.exports = {
+    sendMessageTest,
     localeIdentifierUndefined
 }

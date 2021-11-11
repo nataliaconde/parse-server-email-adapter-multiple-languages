@@ -75,22 +75,22 @@ configureSendEmailMessage = (mandrillOptions, options, text) => {
 }
 
 configureMessage = (options) =>{
-    let language = options.user.get("localIdentifier");
-    let file = pathExists();
+    let language = options.user.get("localeIdentifier")
+    let file = pathExists(options.pathFile);
+
     if(file[language] === undefined){
-        return (file["en_US"] === undefined ? en_US["en_US"] : en_US["en_US"])
+        return en_US["en_US"];
     } else{
         return file[language];
     }
 }
 
-pathExists = () =>{
-    let fs = require('fs'),
-    path = 'language.json';
+pathExists = (pathFile) =>{
+    let fs = require('fs');
 
     try {
-        fs.statSync(path);
-        file = fs.readFileSync(path, 'utf-8');
+        fs.statSync(pathFile);
+        file = fs.readFileSync(pathFile, 'utf-8');
         file = JSON.parse(file);
     }
     catch (e) {

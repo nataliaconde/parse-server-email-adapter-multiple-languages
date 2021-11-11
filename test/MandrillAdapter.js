@@ -18,57 +18,25 @@ describe('MandrillAdapter', () => {
     });
 
     describe('API Keys', ()=>{
-        it('should faild if email address is wrong', () => {
-            sendVerificationEmailTest.localeIdentifierUndefined(Adapter).then(result=>{
-                log(result)
+        it('should faild if API Keys is wrong', () => {
+            sendVerificationEmailTest.sendMessageTest(Adapter).then(result=>{
                 expect(result.message).to.throw('Invalid API key');
             }).catch(error=>{
-                log(error)
+                expect(error.message).to.eql('Invalid API key');
             });
         });
-
-        it('should faild if API Keys is wrong', () => {
-
-        });
     });
 
-    describe('sendVerificationEmail', ()=>{
-        it('localeIdentifier isnt defined', () => {
+    describe('Localization', ()=>{
+        it('Test Message - undefined localeIdentifier', () => {
             sendVerificationEmailTest.localeIdentifierUndefined(Adapter).then(result=>{
-                expect(result.message).to.throw('Invalid API key');
-            }).catch(error=>{
-                expect(error.message).to.eql('Invalid API key');
+                expect(Object.keys(result).length).greaterThan(0)
             })
         });
-        it('localeIdentifier is defined', () => {
-            sendVerificationEmailTest.localeIdentifierUndefined(Adapter, "en_US").then(result=>{
-                expect(result.message).to.throw('Invalid API key');
-            }).catch(error=>{
-                expect(error.message).to.eql('Invalid API key');
+        it('Test Message - set localeIdentifier', () => {
+            sendVerificationEmailTest.localeIdentifierUndefined(Adapter, "pt_BR").then(result=>{
+                expect(Object.keys(result).length).greaterThan(0)
             })
         });
     });
-
-    // describe('sendPasswordResetEmail', ()=>{
-    //     it('localeIdentifier isnt defined', () => {
-    //         sendVerificationEmailTest.localeIdentifierUndefined(Adapter).then(result=>{
-    //             expect(result.message).to.throw('Invalid API key');
-    //         }).catch(error=>{
-    //             expect(error.message).to.eql('Invalid API key');
-    //         })
-    //     });
-    //     it('localeIdentifier is defined', () => {
-    //         sendVerificationEmailTest.localeIdentifierUndefined(Adapter, "en_US").then(result=>{
-    //             expect(result.message).to.throw('Invalid API key');
-    //         }).catch(error=>{
-    //             expect(error.message).to.eql('Invalid API key');
-    //         })
-    //     });
-
-    // });
-
-    // describe('sendMail', ()=>{
-
-    // });
-
 })
