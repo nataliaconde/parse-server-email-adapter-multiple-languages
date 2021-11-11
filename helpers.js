@@ -1,7 +1,7 @@
 const log = console.log,
-en_US = require("./default.json"); 
+    en_US = require("./default.json");
 
-globalVars = (mandrillOptions, options) =>{
+globalVars = (mandrillOptions, options) => {
     let global_merge_vars = [
         { name: 'appname', content: options.appName },
         { name: 'username', content: options.user.get("username") },
@@ -29,8 +29,7 @@ sendTemplate = (mandrill_client, mandrillOptions, message, resolve, reject) => {
     );
 }
 
-mandrillClient = (mandrill_client, message, resolve, reject) =>{
-    log(message) //reply-to isnt comming
+mandrillClient = (mandrill_client, message, resolve, reject) => {
     return mandrill_client.messages.send(
         {
             message: message,
@@ -41,7 +40,7 @@ mandrillClient = (mandrill_client, message, resolve, reject) =>{
     )
 }
 
-getMessageToSend = (fromEmail, displayName, replyTo, message, options, global_merge_vars) =>{
+getMessageToSend = (fromEmail, displayName, replyTo, message, options, global_merge_vars) => {
     let email = (options.user.get("email"));
     return {
         from_email: fromEmail,
@@ -49,7 +48,9 @@ getMessageToSend = (fromEmail, displayName, replyTo, message, options, global_me
         headers: {
             'Reply-To': replyTo
         },
-        to: email,
+        to: [{
+            email: email
+        }],
         subject: message.verificationSubject,
         text: message.verificationBody,
         global_merge_vars: global_merge_vars
@@ -61,31 +62,31 @@ configureSendEmailMessage = (mandrillOptions, options, text) => {
         from_email: mandrillOptions.fromEmail,
         from_name: mandrillOptions.displayName,
         headers: {
-          'Reply-To': mandrillOptions.replyTo
+            'Reply-To': mandrillOptions.replyTo
         },
         to: [{
-          email: options.to
+            email: options.to
         }],
         subject: text.subject,
         text: text.text
     }
-    
+
     return message;
 
 }
 
-configureMessage = (options) =>{
+configureMessage = (options) => {
     let language = options.user.get("localeIdentifier")
     let file = pathExists(options.pathFile);
 
-    if(file[language] === undefined){
+    if (file[language] === undefined) {
         return en_US["en_US"];
-    } else{
+    } else {
         return file[language];
     }
 }
 
-pathExists = (pathFile) =>{
+pathExists = (pathFile) => {
     let fs = require('fs');
 
     try {
@@ -100,7 +101,7 @@ pathExists = (pathFile) =>{
 }
 
 module.exports = {
-    globalVars : globalVars,
+    globalVars: globalVars,
     sendTemplate,
     mandrillClient,
     getMessageToSend,

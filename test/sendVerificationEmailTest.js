@@ -38,8 +38,6 @@ ParseUser = (localeIdentifier) =>{
 sendMessageTest = async(Adapter, value) =>{
     const user = ParseUser(value);
 
-    console.log("user => ", user.get("localeIdentifier"))
-
     const options = {
         displayName:"TEST",
         replyTo:"abc@abc.br",
@@ -59,8 +57,6 @@ sendMessageTest = async(Adapter, value) =>{
 
 localeIdentifierUndefined = async(Adapter, value) =>{
     const user = ParseUser(value);
-
-    console.log("user => ", user.get("localeIdentifier"))
 
     const options = {
         displayName:"TEST",
