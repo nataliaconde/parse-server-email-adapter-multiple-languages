@@ -96,7 +96,6 @@ pathExists = (pathFile) => {
     }
     catch (e) {
         file = require("./default.json");
-        console.log(e.message)
     }
     return file;
 }
