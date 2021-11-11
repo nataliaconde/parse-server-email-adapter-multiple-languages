@@ -1,5 +1,4 @@
-const log = console.log,
-    en_US = require("./default.json");
+const en_US = require("./default.json");
 
 globalVars = (mandrillOptions, options) => {
     let global_merge_vars = [

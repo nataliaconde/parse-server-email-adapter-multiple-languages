@@ -1,7 +1,5 @@
 const 
     mandrill = require('mandrill-api/mandrill'),
-    en_US = require("./default.json"),
-    log = console.log,
     ERRORS = {
     missing_configuration: 'MandrillAdapter requires configuration.',
     missing_mandrill_settings:
