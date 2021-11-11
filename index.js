@@ -97,4 +97,4 @@ MandrillAdapter = (mandrillOptions) => {
 
 }
 
-module.exports = { MandrillAdapter };
+module.exports = MandrillAdapter;
