@@ -88,6 +88,7 @@ configureMessage = (options) => {
 
 pathExists = (pathFile) => {
     let fs = require('fs');
+    let file;
 
     try {
         fs.statSync(pathFile);
@@ -96,6 +97,7 @@ pathExists = (pathFile) => {
     }
     catch (e) {
         file = require("./default.json");
+        console.log(e.message)
     }
     return file;
 }
