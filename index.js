@@ -47,7 +47,7 @@ MandrillAdapter = (mandrillOptions) => {
     }
 
     let sendPasswordResetEmail = options => {
-        let text = configureMessage(options);
+        let text = configureMessage(options, mandrillOptions);
         let global_merge_vars = globalVars(mandrillOptions, options);
 
         let message = getMessageToSend(fromEmail, displayName, replyTo, text, options, global_merge_vars, mandrillOptions);
