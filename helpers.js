@@ -39,7 +39,7 @@ mandrillClient = (mandrill_client, message, resolve, reject) => {
     )
 }
 
-getMessageToSend = (fromEmail, displayName, replyTo, message, options, global_merge_vars) => {
+getMessageToSend = (fromEmail, displayName, replyTo, resetTemplate, message, options, global_merge_vars) => {
     let email = (options.user.get("email"));
     return {
         from_email: fromEmail,
@@ -50,8 +50,8 @@ getMessageToSend = (fromEmail, displayName, replyTo, message, options, global_me
         to: [{
             email: email
         }],
-        subject: message.verificationSubject,
-        text: message.verificationBody,
+        subject: resetTemplate ? message.passwordResetSubject : message.verificationSubject,
+        text: resetTemplate ? message.passwordResetBody : message.verificationBody,
         global_merge_vars: global_merge_vars
     }
 }
