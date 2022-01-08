@@ -35,7 +35,7 @@ MandrillAdapter = (mandrillOptions) => {
         let text = configureMessage(options, mandrillOptions);
         let global_merge_vars = globalVars(mandrillOptions, options);
 
-        let message = getMessageToSend(fromEmail, displayName, replyTo, text, options, global_merge_vars, mandrillOptions);
+        let message = getMessageToSend(fromEmail, displayName, replyTo, false, text, options, global_merge_vars, mandrillOptions);
 
         return new Promise((resolve, reject) => {
             if (mandrillOptions.verificationTemplateName) {
@@ -50,7 +50,7 @@ MandrillAdapter = (mandrillOptions) => {
         let text = configureMessage(options, mandrillOptions);
         let global_merge_vars = globalVars(mandrillOptions, options);
 
-        let message = getMessageToSend(fromEmail, displayName, replyTo, text, options, global_merge_vars, mandrillOptions);
+        let message = getMessageToSend(fromEmail, displayName, replyTo, true, text, options, global_merge_vars, mandrillOptions);
 
         return new Promise((resolve, reject) => {
             if (mandrillOptions.passwordResetTemplateName) {                
